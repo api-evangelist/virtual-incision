@@ -1,0 +1,54 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enrichment overlay — Virtual Incision Search API (WordPress REST wp/v2)
+  version: 1.0.0
+extends: openapi/virtual-incision-search-api-openapi.yml
+x-generated: '2026-09-04'
+x-method: generated
+x-source: API Evangelist enrichment pipeline — captures our enhancements without mutating the derived contract
+actions:
+- target: $.info
+  description: Record that this contract was derived by API Evangelist from the provider-served WordPress route
+    index, not published by the provider.
+  update:
+    x-api-evangelist-profile: https://apis.io/provider/virtual-incision/
+    x-contract-provenance: derived-from-route-discovery
+    x-provider-published-openapi: false
+- target: $.info
+  description: Point at the artifacts this profile derives alongside the contract.
+  update:
+    x-artifacts:
+      authentication: authentication/virtual-incision-authentication.yml
+      conventions: conventions/virtual-incision-conventions.yml
+      errors: errors/virtual-incision-problem-types.yml
+      data-model: data-model/virtual-incision-data-model.yml
+      examples: examples/virtual-incision-examples.yml
+      rate-limits: rate-limits/virtual-incision-rate-limits.yml
+      lifecycle: lifecycle/virtual-incision-lifecycle.yml
+      conformance: conformance/virtual-incision-conformance.yml
+- target: $.paths.*.*[?(@.security)]
+  description: 'Flag every write operation as gated: anonymous callers receive HTTP 401 rest_forbidden.'
+  update:
+    x-anonymous-access: denied
+    x-observed-status-when-anonymous: 401
+- target: $.paths.*.get
+  description: Flag anonymous reads as observed-live, with the edge-cache behaviour an agent will actually meet.
+  update:
+    x-anonymous-access: allowed
+    x-observed: '2026-09-04'
+    x-cache-behaviour: 'WP Engine page cache + Cloudflare; Cache-Control: max-age=600, must-revalidate'
+- target: $.paths
+  description: Record the pagination contract once, at the path set level.
+  update:
+    x-pagination:
+      style: page-number
+      params:
+      - page
+      - per_page
+      - offset
+      headers:
+      - X-WP-Total
+      - X-WP-TotalPages
+      link_rel:
+      - next
+      - prev

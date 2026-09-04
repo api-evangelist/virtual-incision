@@ -1,0 +1,37 @@
+generated: '2026-09-04'
+method: searched
+source: https://virtualincision.com/wp-json/ + https://virtualincision.com/news/ + site-wide search for versioning,
+  deprecation, SLA and status pages
+versioning:
+  scheme: path-namespace
+  current: wp/v2
+  evidence: 'https://virtualincision.com/wp-json/ namespaces: wp/v2, wp-abilities/v1, wp-site-health/v1, wp-block-editor/v1,
+    mcp, oembed/1.0 plus vendor plugin namespaces.'
+  policy_published: false
+  note: Versioning is inherited from WordPress core, not authored by Virtual Incision. The company publishes no
+    API version policy because it publishes no API programme.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  evidence: No Sunset or Deprecation response header observed on https://virtualincision.com/wp-json/wp/v2/posts;
+    no deprecation policy page exists on virtualincision.com.
+status_page:
+  published: false
+  evidence: status.virtualincision.com is NXDOMAIN; no status.io/statuspage.io/instatus property was found. https://virtualincision.com/status
+    returns 404.
+  note: No StatusPage pointer is emitted, because none is served.
+sla:
+  published: false
+  note: No API SLA. The company does publish a support commitment for the device itself at https://virtualincision.com/customer-support/
+    and a 10-business-day acknowledgement SLA for security reports at https://virtualincision.com/coordinated-disclosure/.
+changelog:
+  published: false
+  note: https://virtualincision.com/news/ is a corporate press-release feed (16 posts, most recent 2026-08-25),
+    not an API changelog. No ChangeLog pointer is emitted, because a press feed is not a record of contract change.
+lifecycle_stage: not-a-published-api
+lifecycle_note: 'The wp/v2 surface is a CMS side effect with no announced lifecycle. Its stability is WordPress
+  core''s, not the provider''s: a plugin change or a core upgrade can alter the custom-post-type routes (event,
+  jobpost, portfolio) with no notice to any consumer.'

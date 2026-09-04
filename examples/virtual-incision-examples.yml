@@ -1,0 +1,151 @@
+generated: '2026-09-04'
+method: probed
+source: live anonymous GETs against https://virtualincision.com/wp-json/wp/v2/ on 2026-09-04
+note: Every payload below was actually returned by the host. Responses were trimmed with the ?_fields selector so
+  nothing beyond the illustrated fields is stored; the /wp/v2/users example is deliberately omitted (real people,
+  PII guardrail) even though it is anonymously readable.
+examples:
+- operationId: getPosts
+  request: GET /wp/v2/posts?per_page=1&_fields=id,date,slug,link,title,excerpt,categories
+  status: 200
+  response:
+  - id: 6004
+    date: '2026-08-25T06:03:19'
+    slug: virtual-incision-receives-fda-510k-clearance-for-the-mira-surgical-system-in-benign-hysterectomy-procedures
+    link: https://virtualincision.com/virtual-incision-receives-fda-510k-clearance-for-the-mira-surgical-system-in-benign-hysterectomy-procedures/
+    title:
+      rendered: Virtual Incision Receives FDA 510(k) Clearance for the MIRA™ Surgical System in Benign Hysterectomy
+        Procedures
+    excerpt:
+      rendered: '<p>Expanded indication extends the first miniaturized robotic-assisted surgery platform into one
+        of the highest-volume soft tissue specialties LINCOLN, Neb. &nbsp;— August 25, 2026 — Virtual Incision Corporation,
+        developer of the MIRA™ Surgical System (MIRA), today announced that the U.S. Food and Drug Administration
+        has granted 510(k) clearance for the use of MIRA in benign hysterectomy&nbsp;[…]</p>
+
+        '
+      protected: false
+    categories:
+    - 5
+    - 4
+- operationId: getPages
+  request: GET /wp/v2/pages?per_page=1&_fields=id,slug,link,title
+  status: 200
+  response:
+  - id: 5988
+    slug: opt-out-preferences
+    link: https://virtualincision.com/opt-out-preferences/
+    title:
+      rendered: Opt-out preferences
+- operationId: getMedia
+  request: GET /wp/v2/media?per_page=1&_fields=id,slug,link,media_type,mime_type,source_url
+  status: 200
+  response:
+  - id: 5864
+    slug: mira-in-tray
+    link: https://virtualincision.com/virtual-incision-appoints-jim-alecxih-as-chief-executive-officer/mira-in-tray/
+    media_type: image
+    mime_type: image/png
+    source_url: https://virtualincision.com/wp-content/uploads/2025/06/MIRA-In-Tray.png
+- operationId: getEvent
+  request: GET /wp/v2/event?per_page=1&_fields=id,slug,link,title,date
+  status: 200
+  response:
+  - id: 5777
+    date: '2024-12-19T09:47:46'
+    slug: 2025-worlds-fair
+    link: https://virtualincision.com/event/2025-worlds-fair/
+    title:
+      rendered: 2025 World's&nbsp;Fair
+- operationId: getJobpostLocation
+  request: GET /wp/v2/jobpost_location?per_page=3&_fields=id,name,slug,count
+  status: 200
+  response:
+  - id: 20
+    count: 0
+    name: Delafield, WI
+    slug: delafield-wi
+  - id: 22
+    count: 0
+    name: Delafield, WI -or- Lincoln, NE
+    slug: delafield-wi-or-lincoln-ne
+  - id: 8
+    count: 0
+    name: Lincoln, NE
+    slug: lincoln-ne
+- operationId: getCategories
+  request: GET /wp/v2/categories?per_page=3&_fields=id,name,slug,count
+  status: 200
+  response:
+  - id: 5
+    count: 15
+    name: Press Release
+    slug: press-release
+  - id: 4
+    count: 7
+    name: Recent News
+    slug: news
+  - id: 1
+    count: 0
+    name: Uncategorized
+    slug: uncategorized
+- operationId: getSearch
+  request: GET /wp/v2/search?per_page=2&search=MIRA
+  status: 200
+  response:
+  - id: 6004
+    title: Virtual Incision Receives FDA 510(k) Clearance for the MIRA™ Surgical System in Benign Hysterectomy Procedures
+    url: https://virtualincision.com/virtual-incision-receives-fda-510k-clearance-for-the-mira-surgical-system-in-benign-hysterectomy-procedures/
+    type: post
+    subtype: post
+    _links:
+      self:
+      - embeddable: true
+        href: https://virtualincision.com/wp-json/wp/v2/posts/6004
+        targetHints:
+          allow:
+          - GET
+      about:
+      - href: https://virtualincision.com/wp-json/wp/v2/types/post
+      collection:
+      - href: https://virtualincision.com/wp-json/wp/v2/search
+  - id: 5344
+    title: Virtual Incision Announces Successful Completion of the First Hysterectomy Performed with the MIRA™ Surgical&nbsp;System
+    url: https://virtualincision.com/virtual-incision-announces-successful-completion-of-the-first-hysterectomy-performed-with-the-mira-surgical-system/
+    type: post
+    subtype: post
+    _links:
+      self:
+      - embeddable: true
+        href: https://virtualincision.com/wp-json/wp/v2/posts/5344
+        targetHints:
+          allow:
+          - GET
+      about:
+      - href: https://virtualincision.com/wp-json/wp/v2/types/post
+      collection:
+      - href: https://virtualincision.com/wp-json/wp/v2/search
+error_examples:
+- operationId: getSettings
+  request: GET /wp/v2/settings
+  status: 401
+  response:
+    code: rest_forbidden
+    message: Sorry, you are not allowed to do that.
+    data:
+      status: 401
+- operationId: mcp.tools/list
+  request: POST /wp-json/mcp/mcp-oauth-server {"jsonrpc":"2.0","id":1,"method":"tools/list"}
+  status: 401
+  response:
+    code: mcp_unauthorized
+    message: MCP authentication required.
+    data:
+      status: 401
+  www_authenticate: Bearer realm="https://virtualincision.com", resource_metadata="https://virtualincision.com/.well-known/oauth-protected-resource"
+- operationId: oauth.token
+  request: GET /oauth/token/
+  status: 405
+  response:
+    error: invalid_request
+    error_description: Method not allowed.
+example_count: 10

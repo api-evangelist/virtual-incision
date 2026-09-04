@@ -1,0 +1,28 @@
+generated: '2026-09-04'
+method: probed
+source: https://virtualincision.com/.well-known/oauth-authorization-server
+note: Scopes are read verbatim from the RFC 8414 authorization-server metadata the host serves. They govern the
+  MCP endpoint only; the wp/v2 REST surface uses WordPress Application Passwords / cookie+nonce and has no scope
+  model.
+flows:
+  authorization_code:
+    authorization_endpoint: https://virtualincision.com/oauth/authorize
+    token_endpoint: https://virtualincision.com/oauth/token
+    revocation_endpoint: https://virtualincision.com/oauth/revoke
+    pkce:
+    - S256
+    grant_types:
+    - authorization_code
+    - refresh_token
+    token_endpoint_auth_methods:
+    - none
+    client_id_metadata_document_supported: true
+scopes:
+- name: mcp
+  description: The single scope advertised in scopes_supported. Grants a client access to the Model Context Protocol
+    endpoint at /wp-json/mcp/mcp-oauth-server. The provider publishes no scope reference page, so no finer-grained
+    meaning is asserted here.
+  source: https://virtualincision.com/.well-known/oauth-authorization-server
+scope_count: 1
+docs: null
+docs_note: No scopes/permissions reference page is published; the discovery document is the only source.

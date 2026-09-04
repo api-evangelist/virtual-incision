@@ -1,0 +1,214 @@
+generated: '2026-09-04'
+method: derived
+source: openapi/_source/schemas/*.json (per-collection OPTIONS item schemas fetched from https://virtualincision.com/wp-json/wp/v2/)
+entities:
+- name: Post
+  collection: /wp/v2/posts
+  schema: openapi/_source/schemas/posts.json
+  properties: 28
+  id_field: id
+  id_type: integer
+  count_observed: 16
+  description: A newsroom press release.
+- name: Page
+  collection: /wp/v2/pages
+  schema: openapi/_source/schemas/pages.json
+  properties: 26
+  id_field: id
+  id_type: integer
+  count_observed: 32
+  description: A marketing or clinical page (MIRA, miniRAS, surgeons, safety information, leadership bios).
+- name: Attachment
+  collection: /wp/v2/media
+  schema: openapi/_source/schemas/media.json
+  properties: 33
+  id_field: id
+  id_type: integer
+  count_observed: 249
+  description: A media-library item — MIRA imagery, video posters, press assets.
+- name: Event
+  collection: /wp/v2/event
+  schema: openapi/_source/schemas/event.json
+  properties: 20
+  id_field: id
+  id_type: integer
+  count_observed: 2
+  description: A conference or clinical event (custom post type).
+- name: EventType
+  collection: /wp/v2/event-type
+  schema: openapi/_source/schemas/event-type.json
+  properties: 10
+  id_field: id
+  id_type: integer
+  count_observed: 2
+  description: Taxonomy term classifying an Event.
+- name: JobPost
+  collection: /wp/v2/jobpost
+  schema: openapi/_source/schemas/jobpost.json
+  properties: 26
+  id_field: id
+  id_type: integer
+  count_observed: 0
+  description: A job opening (custom post type). Zero published at probe time.
+- name: JobCategory
+  collection: /wp/v2/jobpost_category
+  schema: openapi/_source/schemas/jobpost_category.json
+  properties: 10
+  id_field: id
+  id_type: integer
+  count_observed: 9
+  description: Functional grouping for a JobPost.
+- name: JobLocation
+  collection: /wp/v2/jobpost_location
+  schema: openapi/_source/schemas/jobpost_location.json
+  properties: 10
+  id_field: id
+  id_type: integer
+  count_observed: 8
+  description: Location term for a JobPost (Lincoln NE and Delafield WI dominate).
+- name: JobType
+  collection: /wp/v2/jobpost_job_type
+  schema: openapi/_source/schemas/jobpost_job_type.json
+  properties: 10
+  id_field: id
+  id_type: integer
+  count_observed: 0
+  description: Employment-type term for a JobPost.
+- name: JobTag
+  collection: /wp/v2/jobpost_tag
+  schema: openapi/_source/schemas/jobpost_tag.json
+  properties: 9
+  id_field: id
+  id_type: integer
+  count_observed: 0
+  description: Free tag for a JobPost.
+- name: Category
+  collection: /wp/v2/categories
+  schema: openapi/_source/schemas/categories.json
+  properties: 10
+  id_field: id
+  id_type: integer
+  count_observed: 3
+  description: Post category — Press Release (15), Recent News (7), Uncategorized (0).
+- name: Tag
+  collection: /wp/v2/tags
+  schema: openapi/_source/schemas/tags.json
+  properties: 8
+  id_field: id
+  id_type: integer
+  count_observed: 2
+  description: Post tag.
+- name: User
+  collection: /wp/v2/users
+  schema: openapi/_source/schemas/users.json
+  properties: 20
+  id_field: id
+  id_type: integer
+  count_observed: 6
+  description: A site author byline. Anonymous reads expose name, slug and link only; email and roles require authentication.
+- name: Comment
+  collection: /wp/v2/comments
+  schema: openapi/_source/schemas/comments.json
+  properties: 18
+  id_field: id
+  id_type: integer
+  count_observed: 0
+  description: Comment. None exist on this site.
+- name: SearchResult
+  collection: /wp/v2/search
+  schema: openapi/_source/schemas/search.json
+  properties: 5
+  id_field: id
+  id_type: integer
+  count_observed: 50
+  description: A polymorphic search hit carrying id, title, url, type and subtype.
+relationships:
+- from: Post
+  to: User
+  type: belongs_to
+  via: author
+- from: Post
+  to: Attachment
+  type: has_one
+  via: featured_media
+- from: Post
+  to: Category
+  type: has_many
+  via: categories
+- from: Post
+  to: Tag
+  type: has_many
+  via: tags
+- from: Page
+  to: Page
+  type: belongs_to
+  via: parent
+- from: Page
+  to: User
+  type: belongs_to
+  via: author
+- from: Page
+  to: Attachment
+  type: has_one
+  via: featured_media
+- from: Attachment
+  to: Post
+  type: belongs_to
+  via: post
+- from: Attachment
+  to: User
+  type: belongs_to
+  via: author
+- from: Event
+  to: EventType
+  type: has_many
+  via: event-type
+- from: Event
+  to: Attachment
+  type: has_one
+  via: featured_media
+- from: JobPost
+  to: JobCategory
+  type: has_many
+  via: jobpost_category
+- from: JobPost
+  to: JobType
+  type: has_many
+  via: jobpost_job_type
+- from: JobPost
+  to: JobLocation
+  type: has_many
+  via: jobpost_location
+- from: JobPost
+  to: JobTag
+  type: has_many
+  via: jobpost_tag
+- from: JobPost
+  to: User
+  type: belongs_to
+  via: author
+- from: Comment
+  to: Post
+  type: belongs_to
+  via: post
+- from: Comment
+  to: Comment
+  type: belongs_to
+  via: parent
+- from: Comment
+  to: User
+  type: belongs_to
+  via: author
+- from: Category
+  to: Category
+  type: belongs_to
+  via: parent
+traversal:
+  style: HAL-like _links block on every item, plus ?_embed to inline author, featured media and terms in one request
+  evidence: https://virtualincision.com/wp-json/wp/v2/search?search=MIRA returns _links.self and _links.about per
+    hit.
+entity_count: 15
+relationship_count: 20
+note: Every entity and every field name is read from the schema the host served on OPTIONS. `acf` (Advanced Custom
+  Fields) appears on most types and is where the site-specific structure lives; its inner shape is not published
+  in the item schema and is therefore not modelled here.

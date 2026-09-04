@@ -1,0 +1,81 @@
+# Virtual Incision
+
+> Virtual Incision Corporation (Lincoln, Nebraska) builds MIRA — the Miniaturized In vivo Robotic
+> Assistant — and defined the miniaturized robotic-assisted surgery (miniRAS) category. MIRA is a
+> roughly two-pound, tray-to-table surgical robot that inserts through a single umbilical incision.
+> The FDA granted De Novo marketing authorization for colectomy in February 2024 and 510(k)
+> clearance for benign hysterectomy in August 2026.
+
+## What is and is not callable
+
+Virtual Incision publishes **no product or developer API**. MIRA is FDA-regulated capital equipment
+sold to hospitals through a direct sales motion; there is no developer portal, no documentation site,
+no SDK on any package registry, no pricing page and no status page. `api.`, `docs.`, `developer.`,
+`status.`, `app.` and `portal.virtualincision.com` are all NXDOMAIN.
+
+What *is* machine-readable is the site itself. `virtualincision.com` runs on WordPress (WP Engine),
+and its REST API is anonymously readable. This file, and the API Evangelist profile it belongs to,
+describe that surface honestly rather than claiming a product API that does not exist.
+
+## Content API — WordPress REST, anonymous, no key
+
+Base URL: https://virtualincision.com/wp-json
+Route index: https://virtualincision.com/wp-json/ (269 routes, 17 namespaces)
+
+- Newsroom posts: https://virtualincision.com/wp-json/wp/v2/posts (16 items)
+- Pages — MIRA, miniRAS, For Surgeons, safety information, leadership: https://virtualincision.com/wp-json/wp/v2/pages (32)
+- Media library: https://virtualincision.com/wp-json/wp/v2/media (249)
+- Events (custom post type) and event types: https://virtualincision.com/wp-json/wp/v2/event
+- Job postings and their category/type/location/tag taxonomies: https://virtualincision.com/wp-json/wp/v2/jobpost
+- Categories and tags: https://virtualincision.com/wp-json/wp/v2/categories
+- Site-wide search: https://virtualincision.com/wp-json/wp/v2/search?search=MIRA
+
+Pagination is `page`/`per_page` (max 100) with `X-WP-Total`, `X-WP-TotalPages` and an RFC 8288 `Link`
+header. `?_fields=` trims a response; `?_embed` inlines linked resources. Every collection answers
+`OPTIONS` with its JSON Schema item definition.
+
+Writes exist on all of these routes but require WordPress authentication (Application Passwords over
+HTTP Basic, or a logged-in cookie plus `X-WP-Nonce`). Anonymous writes return
+`{"code":"rest_forbidden",...}` with HTTP 401.
+
+## MCP endpoint — live, OAuth-gated
+
+- Namespace index: https://virtualincision.com/wp-json/mcp
+- Endpoint: https://virtualincision.com/wp-json/mcp/mcp-oauth-server
+- Second endpoint: https://virtualincision.com/wp-json/mcp/mcp-adapter-default-server
+- Authorization server metadata (RFC 8414): https://virtualincision.com/.well-known/oauth-authorization-server
+- Protected resource metadata (RFC 9728): https://virtualincision.com/.well-known/oauth-protected-resource
+
+This is the WordPress MCP Adapter, not a MIRA product server. An anonymous `tools/list` returns HTTP
+401 `mcp_unauthorized` with a Bearer challenge, so **the tool set is unknown** — it is not empty, and
+no tool name is guessed anywhere in this profile. OAuth 2.1 authorization code with PKCE (S256),
+public client, single scope `mcp`.
+
+## Security
+
+- Coordinated Vulnerability Disclosure Policy: https://virtualincision.com/coordinated-disclosure/
+- Report to: security@virtualincision.com — receipt acknowledged within 10 business days, safe harbor
+  under FDA Section 524B.
+- No `/.well-known/security.txt` is served, so that policy is not machine-discoverable.
+
+## Company pages
+
+- Home: https://virtualincision.com/
+- MIRA: https://virtualincision.com/mira/
+- miniRAS: https://virtualincision.com/miniras/
+- For surgeons: https://virtualincision.com/surgeons/
+- Safety information: https://virtualincision.com/safety-information/
+- News: https://virtualincision.com/news/ (RSS: https://virtualincision.com/feed/)
+- Careers: https://virtualincision.com/careers/
+- Customer support: https://virtualincision.com/customer-support/
+- Schedule a demo: https://virtualincision.com/schedule-a-demo-of-mira/
+- Terms of use: https://virtualincision.com/terms-of-use/
+- Privacy policy: https://virtualincision.com/privacy-policy/
+- GitHub: https://github.com/virtualincision (2 public repos, both forks of NVIDIA Holoscan projects)
+- LinkedIn: https://www.linkedin.com/company/virtual-incision-corporation/
+
+## Provenance
+
+Generated 2026-09-04 by the API Evangelist enrichment pipeline from artifacts in
+https://github.com/api-evangelist/virtual-incision. Virtual Incision does not publish an llms.txt of
+its own; https://virtualincision.com/llms.txt returned HTTP 404 on 2026-09-04.

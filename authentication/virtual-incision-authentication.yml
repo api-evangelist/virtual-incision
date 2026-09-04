@@ -1,0 +1,81 @@
+generated: '2026-09-04'
+method: searched
+source: openapi/*.yml securitySchemes (derived) + https://virtualincision.com/wp-json/ `authentication` block +
+  https://virtualincision.com/.well-known/oauth-authorization-server + https://virtualincision.com/.well-known/oauth-protected-resource
+  (probed 2026-09-04)
+summary:
+  types:
+  - apiKey
+  - http
+  - oauth2
+  api_key_in:
+  - header
+schemes:
+- name: applicationPassword
+  type: http
+  scheme: basic
+  description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php
+    (advertised by the wp-json root `authentication` block).
+  sources:
+  - openapi/virtual-incision-careers-api-openapi.yml
+  - openapi/virtual-incision-discovery-api-openapi.yml
+  - openapi/virtual-incision-events-api-openapi.yml
+  - openapi/virtual-incision-media-api-openapi.yml
+  - openapi/virtual-incision-pages-api-openapi.yml
+  - openapi/virtual-incision-people-api-openapi.yml
+  - openapi/virtual-incision-posts-api-openapi.yml
+  - openapi/virtual-incision-search-api-openapi.yml
+  - openapi/virtual-incision-taxonomy-api-openapi.yml
+- name: cookieNonce
+  type: apiKey
+  in: header
+  parameter: X-WP-Nonce
+  description: Logged-in WordPress cookie plus an X-WP-Nonce header — first-party browser context only.
+  sources:
+  - openapi/virtual-incision-careers-api-openapi.yml
+  - openapi/virtual-incision-discovery-api-openapi.yml
+  - openapi/virtual-incision-events-api-openapi.yml
+  - openapi/virtual-incision-media-api-openapi.yml
+  - openapi/virtual-incision-pages-api-openapi.yml
+  - openapi/virtual-incision-people-api-openapi.yml
+  - openapi/virtual-incision-posts-api-openapi.yml
+  - openapi/virtual-incision-search-api-openapi.yml
+  - openapi/virtual-incision-taxonomy-api-openapi.yml
+- name: mcpOAuth
+  type: oauth2
+  flow: authorizationCode
+  authorization_endpoint: https://virtualincision.com/oauth/authorize
+  token_endpoint: https://virtualincision.com/oauth/token
+  revocation_endpoint: https://virtualincision.com/oauth/revoke
+  pkce:
+  - S256
+  grant_types:
+  - authorization_code
+  - refresh_token
+  token_endpoint_auth_methods:
+  - none
+  client_id_metadata_document_supported: true
+  scopes:
+  - mcp
+  applies_to: https://virtualincision.com/wp-json/mcp/mcp-oauth-server
+  description: OAuth 2.1 authorization server advertised by an RFC 8414 document at the domain root and referenced
+    by an RFC 9728 protected-resource document. Public client, PKCE required, one scope. This scheme does NOT appear
+    in any OpenAPI in this repo because it governs the MCP endpoint, not the wp/v2 REST surface.
+  sources:
+  - well-known/virtual-incision-oauth-authorization-server.json
+  - well-known/virtual-incision-oauth-protected-resource.json
+anonymous_read:
+  supported: true
+  detail: Every wp/v2 content collection (posts, pages, media, event, jobpost and their taxonomies, categories,
+    tags, users, search, types, statuses, comments) returned HTTP 200 to an unauthenticated GET. settings, menus,
+    plugins and themes returned 401.
+  evidence: https://virtualincision.com/wp-json/wp/v2/posts?per_page=1 -> 200; https://virtualincision.com/wp-json/wp/v2/settings
+    -> 401
+docs: https://virtualincision.com/wp-admin/authorize-application.php
+docs_note: Virtual Incision publishes NO authentication documentation of its own — there is no developer portal
+  or docs site. The Application Password authorize screen is WordPress core, advertised by the `authentication`
+  block of https://virtualincision.com/wp-json/, and requires an existing WordPress login. Nothing on this host
+  is obtainable by a member of the public.
+note: 'Three distinct schemes on one host: anonymous read for wp/v2 content, WordPress Application Passwords (HTTP
+  Basic) or cookie+X-WP-Nonce for wp/v2 writes, and OAuth 2.1 bearer with scope "mcp" for the MCP endpoint. An agent
+  must know which surface it is on before it picks a credential.'

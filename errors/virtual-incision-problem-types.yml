@@ -1,0 +1,82 @@
+generated: '2026-09-04'
+method: derived
+source: openapi/*.yml (4xx responses) + live anonymous probes of https://virtualincision.com/wp-json/
+format: wordpress-rest-error
+format_note: NOT RFC 9457. Responses are application/json with the WordPress envelope {code, message, data:{status,
+  params?}}; no application/problem+json media type is served anywhere on this host.
+envelope:
+  media_type: application/json
+  fields:
+  - name: code
+    type: string
+    description: Machine-readable error slug — the field an agent should branch on.
+  - name: message
+    type: string
+    description: Human-readable message, localised to the site language.
+  - name: data.status
+    type: integer
+    description: HTTP status code, repeated in the body.
+  - name: data.params
+    type: object
+    description: Per-parameter validation messages, present on rest_invalid_param.
+problem_types:
+- code: rest_no_route
+  status: 404
+  title: No route matched
+  observed: true
+  evidence: POST https://virtualincision.com/wp-json/mcp/mcp -> 404
+  message: No route was found matching the URL and request method.
+  remediation: Check the path against the route index at https://virtualincision.com/wp-json/ — the method matters
+    as much as the path.
+- code: rest_forbidden
+  status: 401
+  title: Insufficient capability
+  observed: true
+  evidence: GET https://virtualincision.com/wp-json/wp/v2/settings -> 401; POST tools/list on /wp-json/mcp/mcp-adapter-default-server
+    -> 401
+  message: Sorry, you are not allowed to do that.
+  remediation: Authenticate with a WordPress Application Password over HTTP Basic. Note the status is 401 even where
+    403 would be more accurate — the code, not the status, distinguishes "unauthenticated" from "not permitted".
+- code: mcp_unauthorized
+  status: 401
+  title: MCP authentication required
+  observed: true
+  evidence: POST tools/list on https://virtualincision.com/wp-json/mcp/mcp-oauth-server -> 401
+  message: MCP authentication required.
+  remediation: Obtain a bearer token with scope "mcp" from https://virtualincision.com/oauth/token. The 401 carries
+    WWW-Authenticate with resource_metadata pointing at the RFC 9728 document.
+- code: rest_invalid_param
+  status: 400
+  title: Invalid parameter
+  observed: false
+  evidence: openapi/*.yml 400 responses derived from the route index arg validators
+  message: 'Invalid parameter(s): <name>'
+  remediation: data.params names each offending parameter; check enum/minimum/maximum in the derived OpenAPI parameters.
+- code: rest_post_invalid_id
+  status: 404
+  title: Invalid post ID
+  observed: false
+  evidence: openapi/virtual-incision-posts-api-openapi.yml 404 responses
+  message: Invalid post ID.
+  remediation: Resolve the id from the collection endpoint or from /wp/v2/search before requesting an item.
+- code: rest_cannot_edit
+  status: 401
+  title: Cannot edit resource
+  observed: false
+  evidence: derived from wp/v2 write routes
+  message: Sorry, you are not allowed to edit this post.
+  remediation: Write routes exist on every content collection but require an authenticated user with the editing
+    capability.
+- code: invalid_request
+  status: 405
+  title: OAuth method not allowed
+  observed: true
+  evidence: GET https://virtualincision.com/oauth/token/ -> 405 {"error":"invalid_request","error_description":"Method
+    not allowed."}
+  message: Method not allowed.
+  remediation: The OAuth endpoints use the RFC 6749 error envelope ({error, error_description}), NOT the WordPress
+    envelope. An agent handling errors on this host must branch on two different error shapes.
+error_count: 7
+observed_count: 4
+note: 'Two distinct error envelopes coexist on one host: the WordPress {code,message,data} envelope on /wp-json/*,
+  and the OAuth 2.0 {error,error_description} envelope on /oauth/*. Neither is RFC 9457.'

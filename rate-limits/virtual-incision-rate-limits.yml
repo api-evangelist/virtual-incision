@@ -1,0 +1,28 @@
+generated: '2026-09-04'
+method: probed
+source: live anonymous responses from https://virtualincision.com/wp-json/wp/v2/ + https://virtualincision.com/robots.txt
+limit_count: 0
+documented: false
+rate_limits: []
+response_headers: []
+status_on_exhaustion: null
+observed:
+- signal: robots.txt Crawl-delay
+  value: 10 seconds
+  url: https://virtualincision.com/robots.txt
+  status: 200
+  note: The only rate expectation the company publishes anywhere. It governs crawlers, not API clients, but it is
+    the closest thing to a stated pace.
+- signal: Cache-Control
+  value: max-age=600, must-revalidate
+  url: https://virtualincision.com/wp-json/wp/v2/posts?per_page=1
+  status: 200
+  note: 'A 10-minute edge TTL is the de-facto throttle: repeat reads are served by Cloudflare (cf-cache-status:
+    HIT) and never reach the origin.'
+- signal: per_page ceiling
+  value: '100'
+  note: Enforced by the wp/v2 parameter validator on every collection; requests above it fail with rest_invalid_param.
+note: 'Virtual Incision publishes no rate limits, and no X-RateLimit-*, RateLimit-* or Retry-After header was observed
+  on any response. An honest zero: there is no API programme, so there is no published quota. Cloudflare and WP
+  Engine sit in front of the origin and may apply undocumented protections that an agent cannot anticipate from
+  any response signal.'

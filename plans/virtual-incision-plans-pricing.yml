@@ -1,0 +1,16 @@
+generated: '2026-09-04'
+method: searched
+source: 'https://virtualincision.com/ (full sitemap walk: 26 pages, no pricing page) + https://virtualincision.com/schedule-a-demo-of-mira/'
+plan_count: 0
+plans: []
+pricing_published: false
+commercial_model: capital medical device sold to hospitals and surgical centers through a direct sales motion; the
+  only commercial call to action on the site is "Schedule a demo of MIRA".
+evidence:
+- url: https://virtualincision.com/schedule-a-demo-of-mira/
+  status: 200
+- url: https://virtualincision.com/customer-support/
+  status: 200
+note: No API plans exist because no API is sold. MIRA is FDA-regulated capital equipment; there is no self-serve
+  tier, no free tier, no metered API pricing, and no published device price. Recorded as an explicit zero rather
+  than omitted.

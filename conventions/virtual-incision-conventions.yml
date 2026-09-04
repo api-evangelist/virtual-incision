@@ -1,0 +1,99 @@
+generated: '2026-09-04'
+method: derived
+source: openapi/*.yml + live anonymous responses from https://virtualincision.com/wp-json/wp/v2/
+auth:
+  style: http-basic (WordPress Application Passwords) for wp/v2 writes; OAuth 2.1 bearer with scope "mcp" for the
+    MCP endpoint; anonymous for wp/v2 reads
+  anonymous_read: true
+  detail: See authentication/virtual-incision-authentication.yml and scopes/virtual-incision-scopes.yml.
+idempotency:
+  supported: false
+  coverage: none
+  header: null
+  scope: []
+  retention: null
+  evidence: No Idempotency-Key (or equivalent) parameter appears on any of the 98 derived operations, and none is
+    documented. Retrying a POST to /wp/v2/posts creates a second post.
+  note: Reads are naturally idempotent; the mutating surface has no replay protection at all.
+pagination:
+  style: page-number
+  params:
+  - name: page
+    default: 1
+  - name: per_page
+    default: 10
+    max: 100
+  - name: offset
+  response_headers:
+  - X-WP-Total
+  - X-WP-TotalPages
+  link_header: RFC 8288 Link with rel="next" and rel="prev"
+  evidence: 'GET https://virtualincision.com/wp-json/wp/v2/posts?per_page=1 -> x-wp-total: 16, x-wp-totalpages:
+    16, link: <...page=2>; rel="next"'
+field_selection:
+  supported: true
+  param: _fields
+  detail: ?_fields=id,title,link trims the response to named fields; ?_embed inlines linked resources (author, featured
+    media, terms).
+  evidence: GET https://virtualincision.com/wp-json/wp/v2/posts?per_page=1&_fields=id,date,slug,link,title returned
+    exactly those fields.
+metadata:
+  supported: true
+  field: meta
+  note: Plus an `acf` object on every content type (Advanced Custom Fields), which is where the site-specific structure
+    lives.
+request_id:
+  supported: false
+  note: No X-Request-Id / Request-Id / traceparent is returned. The only correlatable header is Cloudflare cf-ray,
+    which is edge infrastructure, not an API affordance.
+versioning:
+  style: path-namespace
+  current: wp/v2
+  detail: See lifecycle/virtual-incision-lifecycle.yml.
+error_envelope:
+  shape: '{code, message, data:{status, params?}}'
+  rfc9457: false
+  second_envelope: '{error, error_description} on /oauth/*'
+  detail: See errors/virtual-incision-problem-types.yml.
+rate_limit_signaling:
+  headers: []
+  status_on_exhaustion: null
+  evidence: No X-RateLimit-*, RateLimit-* or Retry-After header observed on any anonymous response. See rate-limits/virtual-incision-rate-limits.yml.
+caching:
+  supported: true
+  headers:
+  - 'Cache-Control: max-age=600, must-revalidate'
+  - X-Cacheable
+  - X-Cache
+  - CF-Cache-Status
+  note: 'WP Engine page cache plus Cloudflare. Collection responses were observed as cf-cache-status: HIT — an agent
+    polling this surface is mostly reading an edge cache.'
+reversibility:
+  grade: documented
+  coverage: partial
+  surfaces:
+  - write: DELETE /wp/v2/posts/{id}
+    operationId: deletePostsById
+    reversal: Soft delete by default — the resource moves to the WordPress trash and can be restored by PATCHing
+      status back to publish/draft.
+    reversal_operation: updatePostsById
+    window: null
+    window_note: WordPress core purges trashed items after EMPTY_TRASH_DAYS (30 days by default) but Virtual Incision
+      publishes nothing about its configuration, so NO window is asserted here.
+    force_delete: DELETE with ?force=true is permanent and has no reversal.
+  - write: DELETE /wp/v2/media/{id}
+    operationId: deleteMediaById
+    reversal: None. Media deletion is always permanent in the WordPress REST API — force=true is required and the
+      file is removed.
+    reversal_operation: null
+    window: null
+  - write: POST /wp/v2/posts
+    operationId: createPosts
+    reversal: deletePostsById
+    window: null
+  note: 'Grade is `documented`, not `verified`: reversal paths exist and are inherent to WordPress, but the provider
+    states no window for any of them. No window is invented. Every write surface here is OAuth/Application-Password
+    gated, so an anonymous agent cannot reach any of it.'
+dry_run_mode:
+  supported: false
+  note: No preview/validate-only mode on any write route.

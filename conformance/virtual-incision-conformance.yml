@@ -1,0 +1,78 @@
+generated: '2026-09-04'
+method: probed
+source: openapi/*.yml + https://virtualincision.com/.well-known/oauth-authorization-server + https://virtualincision.com/.well-known/oauth-protected-resource
+conformance:
+- id: oauth2
+  conforms: true
+  evidence: https://virtualincision.com/.well-known/oauth-authorization-server
+  detail: RFC 6749 / OAuth 2.1 authorization-code grant with refresh_token, advertised in an RFC 8414 metadata document
+    served at the domain root.
+- id: rfc8414
+  conforms: true
+  evidence: https://virtualincision.com/.well-known/oauth-authorization-server
+  detail: OAuth 2.0 Authorization Server Metadata, HTTP 200, carrying issuer, authorization_endpoint, token_endpoint,
+    revocation_endpoint, grant_types_supported and scopes_supported.
+- id: rfc9728
+  conforms: true
+  evidence: https://virtualincision.com/.well-known/oauth-protected-resource
+  detail: OAuth 2.0 Protected Resource Metadata, HTTP 200, naming the MCP endpoint as the resource and virtualincision.com
+    as its authorization server; the 401 from the MCP endpoint returns a matching WWW-Authenticate resource_metadata
+    challenge.
+- id: rfc7636
+  conforms: true
+  evidence: https://virtualincision.com/.well-known/oauth-authorization-server
+  detail: 'PKCE required — code_challenge_methods_supported: [S256], token_endpoint_auth_methods_supported: [none].'
+- id: mcp
+  conforms: true
+  evidence: https://virtualincision.com/wp-json/mcp
+  detail: Model Context Protocol endpoints registered under the wp-json "mcp" namespace (WordPress MCP Adapter).
+    Live but OAuth-gated, so protocol version and tool set could not be observed.
+- id: oidc
+  conforms: false
+  evidence: https://virtualincision.com/.well-known/openid-configuration
+  detail: HTTP 404 — no OpenID Connect discovery document.
+- id: rfc9457
+  conforms: false
+  evidence: openapi/virtual-incision-posts-api-openapi.yml
+  detail: Errors use the WordPress {code,message,data.status} envelope, not application/problem+json.
+- id: idempotency
+  conforms: false
+  evidence: openapi/virtual-incision-posts-api-openapi.yml
+  detail: No Idempotency-Key header or equivalent replay protection on any write route.
+- id: pagination
+  conforms: true
+  evidence: https://virtualincision.com/wp-json/wp/v2/posts?per_page=1
+  detail: 'Page/per_page query pagination with X-WP-Total and X-WP-TotalPages response headers and RFC 8288 Link
+    rel="next"/"prev" — observed live (x-wp-total: 16, x-wp-totalpages: 16).'
+- id: rfc8288
+  conforms: true
+  evidence: https://virtualincision.com/wp-json/wp/v2/posts?per_page=1
+  detail: 'Web Linking — Link: <...?page=2>; rel="next" returned on collection responses; every item body carries
+    a HAL-like _links block.'
+- id: json-schema
+  conforms: true
+  evidence: openapi/_source/schemas/posts.json
+  detail: Every wp/v2 collection answers OPTIONS with a JSON Schema (draft-04) item schema; those schemas are carried
+    verbatim into components.schemas of the derived OpenAPIs.
+- id: fhir
+  conforms: false
+  evidence: https://virtualincision.com/wp-json/
+  detail: No clinical data surface exists. MIRA is a surgical robot sold as a device; no HL7 FHIR, DICOM or IHE
+    endpoint is published.
+domain_standard:
+  market: medical devices / robotic-assisted surgery
+  declared: false
+  candidates_checked:
+  - HL7 FHIR
+  - DICOM
+  - IHE profiles
+  - HL7 v2
+  - UDI/GUDID
+  - ISO 13485 published surface
+  note: 'REWARD-ONLY and correctly unrewarded: the only contract Virtual Incision serves is a WordPress content
+    API, which has no medical-device domain standard to declare. Nothing is invented to fill the slot. The company
+    is regulated (FDA De Novo + 510(k), FDA Section 524B cybersecurity) but publishes no clinical interoperability
+    endpoint.'
+certifications_published: []
+certifications_note: No trust center, SOC 2, ISO 27001 or HIPAA attestation page was found on virtualincision.com;
+  trust.virtualincision.com and security.virtualincision.com are NXDOMAIN.

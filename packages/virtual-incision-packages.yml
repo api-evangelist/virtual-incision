@@ -1,0 +1,54 @@
+generated: '2026-09-04'
+method: searched
+source: registry.npmjs.org/-/v1/search (text=virtual incision -> 17125 unrelated hits, none first-party; text=virtualincision
+  -> 0), pypi.org/pypi/{virtual-incision,virtualincision}/json -> 404, rubygems.org/api/v1/search.json?query=virtual+incision
+  -> [], crates.io/api/v1/crates?q=virtualincision -> 0, packagist.org/search.json?q=virtual-incision -> 0, and
+  api.github.com/orgs/virtualincision/repos
+packages: []
+package_count: 0
+official_count: 0
+github_org:
+  url: https://github.com/virtualincision
+  name: Virtual Incision Corporation
+  public_repos: 2
+  repos:
+  - name: virtualincision/holoscan-sdk
+    fork: true
+    upstream: nvidia-holoscan/holoscan-sdk
+    description: The AI sensor processing SDK for low latency streaming workflows
+    version: null
+    published: null
+    note: A FORK of NVIDIA Holoscan, last updated 2024-07-25. Not a Virtual Incision client library and not distributed
+      on any registry — it corroborates the published NVIDIA Isaac / Holoscan work rather than providing an SDK.
+  - name: virtualincision/holoscan-sensor-bridge
+    fork: true
+    upstream: nvidia-holoscan/holoscan-sensor-bridge
+    description: NVIDIA Holoscan Sensor Bridge - Bring Your Own Sensor (BYOS) over Ethernet
+    version: null
+    published: null
+    note: A FORK, last updated 2025-05-29. Same reasoning as above.
+note: No first-party SDK or client library exists on any registry, in any language. No SDKs pointer is emitted,
+  because emitting one would credit Virtual Incision with client libraries it does not ship. The two public GitHub
+  repositories are both forks of NVIDIA Holoscan projects; version and published are recorded as null because a
+  fork has no registry release of its own, not because the registries were unchecked.
+registries_checked:
+- registry: npm
+  query: virtualincision
+  results: 0
+- registry: npm
+  query: virtual incision
+  results: 17125
+  note: All unrelated — "virtual" as a common English token. No package names or homepages resolve to virtualincision.com.
+- registry: pypi
+  query: virtual-incision / virtualincision
+  results: 0
+  status: 404
+- registry: rubygems
+  query: virtual incision
+  results: 0
+- registry: crates.io
+  query: virtualincision
+  results: 0
+- registry: packagist
+  query: virtual-incision
+  results: 0

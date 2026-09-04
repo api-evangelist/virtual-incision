@@ -1,0 +1,25 @@
+generated: '2026-09-04'
+method: generated
+source: openapi/*.yml (every operationId below was grepped out of a derived spec in this repo; none is invented)
+note: >-
+  Virtual Incision publishes no Agent Skills and no AGENTS.md; a search of virtualincision.com and
+  github.com/virtualincision found none. These three are authored by API Evangelist against the
+  WordPress REST contract the host actually serves, and every one of them is read-only by design —
+  the write surface on this host is authenticated and belongs to the company.
+skills:
+  - name: virtual-incision-newsroom-monitor
+    file: virtual-incision-newsroom-monitor.md
+    description: Track regulatory and clinical announcements from the machine-readable newsroom.
+    api: virtual-incision:virtual-incision-posts-api
+    operations: [getPosts, getPostsById, getCategories, getSearch]
+  - name: virtual-incision-careers-watch
+    file: virtual-incision-careers-watch.md
+    description: Read job openings and the category, job-type and location taxonomies as hiring signal.
+    api: virtual-incision:virtual-incision-careers-api
+    operations: [getJobpost, getJobpostById, getJobpostCategory, getJobpostLocation, getJobpostJobType]
+  - name: virtual-incision-media-assets
+    file: virtual-incision-media-assets.md
+    description: Locate MIRA imagery and press assets and resolve direct source URLs and MIME types.
+    api: virtual-incision:virtual-incision-media-api
+    operations: [getMedia, getMediaById, getPages]
+skill_count: 3

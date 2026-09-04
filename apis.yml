@@ -1,18 +1,248 @@
 aid: virtual-incision
 name: Virtual Incision
-description: 'Virtual Incision is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Virtual Incision Corporation is a Lincoln, Nebraska surgical robotics company, spun out of the University
+  of Nebraska in 2006, that builds MIRA — the Miniaturized In vivo Robotic Assistant — and defined the miniaturized
+  robotic-assisted surgery (miniRAS) category. MIRA is a roughly two-pound, tray-to-table robot inserted through
+  a single umbilical incision, designed to make any operating room robot-ready in minutes. It won FDA De Novo authorization
+  for colectomy in 2024 and 510(k) clearance for benign hysterectomy in 2026. Virtual Incision publishes no product
+  or developer API: MIRA is regulated capital equipment, not a platform. The machine-readable surface on virtualincision.com
+  is the anonymously readable WordPress REST API (newsroom, MIRA pages, events, jobs, media) plus a live but OAuth-gated
+  WordPress MCP Adapter endpoint advertised by RFC 8414 and RFC 9728 discovery documents. The company publishes
+  a coordinated vulnerability disclosure policy under FDA Section 524B.'
 url: https://raw.githubusercontent.com/api-evangelist/virtual-incision/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment-pipeline
+image: https://virtualincision.com/wp-content/uploads/2022/07/VIC-logo-icon-400.png
 specificationVersion: '0.20'
 created: '2026-09-04'
 modified: '2026-09-04'
 tags:
 - Company
-apis: []
+- Medical Devices
+- Surgical Robotics
+- Robotics
+- Healthcare
+- Health
+- Life Sciences
+- Medical Technology
+- Content
+- News
+- Careers
+- Events
+- Model Context Protocol
+position: Producing
+apis:
+- aid: virtual-incision:virtual-incision-posts-api
+  name: Virtual Incision News Posts API
+  description: Newsroom posts — FDA clearances, clinical milestones, leadership announcements — served as JSON.
+  humanURL: https://virtualincision.com/news/
+  baseURL: https://virtualincision.com/wp-json
+  tags:
+  - News
+  - Posts
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/virtual-incision-posts-api-openapi.yml
+  - type: Overlay
+    url: overlays/virtual-incision-posts-api-overlay.yaml
+  - type: DataModel
+    url: data-model/virtual-incision-data-model.yml
+  - type: ErrorCatalog
+    url: errors/virtual-incision-problem-types.yml
+  - type: Examples
+    url: examples/virtual-incision-examples.yml
+  image: https://virtualincision.com/wp-content/uploads/2022/07/VIC-logo-icon-400.png
+- aid: virtual-incision:virtual-incision-pages-api
+  name: Virtual Incision Pages API
+  description: 'Marketing and clinical pages: MIRA, miniRAS, For Surgeons, safety information and leadership profiles.'
+  humanURL: https://virtualincision.com/mira/
+  baseURL: https://virtualincision.com/wp-json
+  tags:
+  - Pages
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/virtual-incision-pages-api-openapi.yml
+  - type: Overlay
+    url: overlays/virtual-incision-pages-api-overlay.yaml
+  - type: DataModel
+    url: data-model/virtual-incision-data-model.yml
+  - type: ErrorCatalog
+    url: errors/virtual-incision-problem-types.yml
+  - type: Examples
+    url: examples/virtual-incision-examples.yml
+  image: https://virtualincision.com/wp-content/uploads/2022/07/VIC-logo-icon-400.png
+- aid: virtual-incision:virtual-incision-media-api
+  name: Virtual Incision Media API
+  description: The virtualincision.com media library — MIRA imagery, video posters and press assets.
+  humanURL: https://virtualincision.com/request-media-kit/
+  baseURL: https://virtualincision.com/wp-json
+  tags:
+  - Media
+  - Images
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/virtual-incision-media-api-openapi.yml
+  - type: Overlay
+    url: overlays/virtual-incision-media-api-overlay.yaml
+  - type: DataModel
+    url: data-model/virtual-incision-data-model.yml
+  - type: ErrorCatalog
+    url: errors/virtual-incision-problem-types.yml
+  - type: Examples
+    url: examples/virtual-incision-examples.yml
+  image: https://virtualincision.com/wp-content/uploads/2022/07/VIC-logo-icon-400.png
+- aid: virtual-incision:virtual-incision-events-api
+  name: Virtual Incision Events API
+  description: The `event` custom post type and `event-type` taxonomy — conferences and clinical events.
+  humanURL: https://virtualincision.com/news/
+  baseURL: https://virtualincision.com/wp-json
+  tags:
+  - Events
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/virtual-incision-events-api-openapi.yml
+  - type: Overlay
+    url: overlays/virtual-incision-events-api-overlay.yaml
+  - type: DataModel
+    url: data-model/virtual-incision-data-model.yml
+  - type: ErrorCatalog
+    url: errors/virtual-incision-problem-types.yml
+  - type: Examples
+    url: examples/virtual-incision-examples.yml
+  image: https://virtualincision.com/wp-content/uploads/2022/07/VIC-logo-icon-400.png
+- aid: virtual-incision:virtual-incision-careers-api
+  name: Virtual Incision Careers API
+  description: The `jobpost` custom post type plus its category, job-type, location and tag taxonomies — the machine-readable
+    careers surface.
+  humanURL: https://virtualincision.com/careers/
+  baseURL: https://virtualincision.com/wp-json
+  tags:
+  - Careers
+  - Jobs
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/virtual-incision-careers-api-openapi.yml
+  - type: Overlay
+    url: overlays/virtual-incision-careers-api-overlay.yaml
+  - type: DataModel
+    url: data-model/virtual-incision-data-model.yml
+  - type: ErrorCatalog
+    url: errors/virtual-incision-problem-types.yml
+  - type: Examples
+    url: examples/virtual-incision-examples.yml
+  image: https://virtualincision.com/wp-content/uploads/2022/07/VIC-logo-icon-400.png
+- aid: virtual-incision:virtual-incision-taxonomy-api
+  name: Virtual Incision Taxonomy API
+  description: Post categories, tags and the taxonomy registry behind the newsroom.
+  humanURL: https://virtualincision.com/news/
+  baseURL: https://virtualincision.com/wp-json
+  tags:
+  - Taxonomy
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/virtual-incision-taxonomy-api-openapi.yml
+  - type: Overlay
+    url: overlays/virtual-incision-taxonomy-api-overlay.yaml
+  - type: DataModel
+    url: data-model/virtual-incision-data-model.yml
+  - type: ErrorCatalog
+    url: errors/virtual-incision-problem-types.yml
+  - type: Examples
+    url: examples/virtual-incision-examples.yml
+  image: https://virtualincision.com/wp-content/uploads/2022/07/VIC-logo-icon-400.png
+- aid: virtual-incision:virtual-incision-people-api
+  name: Virtual Incision People API
+  description: Site authors — the leadership and communications bylines behind newsroom posts.
+  humanURL: https://virtualincision.com/
+  baseURL: https://virtualincision.com/wp-json
+  tags:
+  - People
+  - Team
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/virtual-incision-people-api-openapi.yml
+  - type: Overlay
+    url: overlays/virtual-incision-people-api-overlay.yaml
+  - type: DataModel
+    url: data-model/virtual-incision-data-model.yml
+  - type: ErrorCatalog
+    url: errors/virtual-incision-problem-types.yml
+  - type: Examples
+    url: examples/virtual-incision-examples.yml
+  image: https://virtualincision.com/wp-content/uploads/2022/07/VIC-logo-icon-400.png
+- aid: virtual-incision:virtual-incision-search-api
+  name: Virtual Incision Search API
+  description: Site-wide search across posts, pages and the custom post types.
+  humanURL: https://virtualincision.com/
+  baseURL: https://virtualincision.com/wp-json
+  tags:
+  - Search
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/virtual-incision-search-api-openapi.yml
+  - type: Overlay
+    url: overlays/virtual-incision-search-api-overlay.yaml
+  - type: DataModel
+    url: data-model/virtual-incision-data-model.yml
+  - type: ErrorCatalog
+    url: errors/virtual-incision-problem-types.yml
+  - type: Examples
+    url: examples/virtual-incision-examples.yml
+  image: https://virtualincision.com/wp-content/uploads/2022/07/VIC-logo-icon-400.png
+- aid: virtual-incision:virtual-incision-discovery-api
+  name: Virtual Incision Discovery API
+  description: Route, post-type and status discovery plus the comment surface.
+  humanURL: https://virtualincision.com/wp-json/
+  baseURL: https://virtualincision.com/wp-json
+  tags:
+  - Discovery
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/virtual-incision-discovery-api-openapi.yml
+  - type: Overlay
+    url: overlays/virtual-incision-discovery-api-overlay.yaml
+  - type: DataModel
+    url: data-model/virtual-incision-data-model.yml
+  - type: ErrorCatalog
+    url: errors/virtual-incision-problem-types.yml
+  - type: Examples
+    url: examples/virtual-incision-examples.yml
+  image: https://virtualincision.com/wp-content/uploads/2022/07/VIC-logo-icon-400.png
+- aid: virtual-incision:mcp
+  name: Virtual Incision MCP Server (WordPress MCP Adapter)
+  description: 'A Model Context Protocol endpoint registered under the "mcp" namespace of the virtualincision.com
+    WordPress REST route index and served at /wp-json/mcp/mcp-oauth-server (with a second endpoint at /wp-json/mcp/mcp-adapter-default-server).
+    The server is live but OAuth-gated: an anonymous JSON-RPC tools/list returns HTTP 401 mcp_unauthorized with
+    a WWW-Authenticate Bearer challenge pointing at https://virtualincision.com/.well-known/oauth-protected-resource,
+    so the published tool set could not be enumerated. This is the site CMS''s MCP endpoint, not a MIRA product
+    MCP server.'
+  humanURL: https://virtualincision.com/wp-json/mcp
+  baseURL: https://virtualincision.com/wp-json/mcp/mcp-oauth-server
+  tags:
+  - MCP
+  - Agents
+  - Model Context Protocol
+  properties:
+  - type: MCPServer
+    url: mcp/virtual-incision-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/virtual-incision-tool-crosswalk.yml
+  - type: OAuthScopes
+    url: scopes/virtual-incision-scopes.yml
+  - type: Authentication
+    url: authentication/virtual-incision-authentication.yml
+  image: https://virtualincision.com/wp-content/uploads/2022/07/VIC-logo-icon-400.png
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +250,69 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
+  url: https://virtualincision.com/
+- type: Blog
+  url: https://virtualincision.com/news/
+- type: BlogRSS
+  url: https://virtualincision.com/feed/
+- type: Support
+  url: https://virtualincision.com/customer-support/
+- type: Careers
+  url: https://virtualincision.com/careers/
+- type: Technology
+  url: https://virtualincision.com/mira/
+- type: TermsOfService
+  url: https://virtualincision.com/terms-of-use/
+- type: PrivacyPolicy
+  url: https://virtualincision.com/privacy-policy/
+- type: Security
+  url: https://virtualincision.com/coordinated-disclosure/
+- type: GitHubOrganization
+  url: https://github.com/virtualincision
+- type: LinkedIn
+  url: https://www.linkedin.com/company/virtual-incision-corporation/
+- type: SecondaryMarket
   url: https://forgeglobal.com/virtual-incision_stock/
+- type: WellKnown
+  url: well-known/virtual-incision-well-known.yml
+- type: LLMsTxt
+  url: llms/virtual-incision-llms.txt
+- type: Packages
+  url: packages/virtual-incision-packages.yml
+- type: Authentication
+  url: authentication/virtual-incision-authentication.yml
+- type: OAuthScopes
+  url: scopes/virtual-incision-scopes.yml
+- type: Conventions
+  url: conventions/virtual-incision-conventions.yml
+- type: Conformance
+  url: conformance/virtual-incision-conformance.yml
+- type: Lifecycle
+  url: lifecycle/virtual-incision-lifecycle.yml
+- type: DomainSecurity
+  url: security/virtual-incision-domain-security.yml
+- type: VulnerabilityDisclosure
+  url: security/virtual-incision-vulnerability-disclosure.yml
+- type: ErrorCatalog
+  url: errors/virtual-incision-problem-types.yml
+- type: DataModel
+  url: data-model/virtual-incision-data-model.yml
+- type: Examples
+  url: examples/virtual-incision-examples.yml
+- type: RateLimits
+  url: rate-limits/virtual-incision-rate-limits.yml
+- type: Plans
+  url: plans/virtual-incision-plans-pricing.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: MCPServer
+  url: mcp/virtual-incision-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/virtual-incision-tool-crosswalk.yml
+- type: Overlay
+  url: overlays/virtual-incision-posts-api-overlay.yaml
+x-enrichment:
+  date: '2026-09-04'
+  status: enriched
+  artifacts_added: 58
+  pass: local-v3

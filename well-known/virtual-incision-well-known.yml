@@ -1,0 +1,63 @@
+generated: '2026-09-04'
+method: probed
+source: live GET of the named /.well-known/ path list on every host in apis.yml
+hit_count: 2
+path_echo_control: passed
+soft_404_control:
+  path: /.well-known/virtual-incision-negative-control-7f3ab91c.json
+  status: 404
+  note: Negative control returned 404, so this host is not a path-echoing catch-all and the two 200s above are real
+    documents.
+hosts:
+- host: https://virtualincision.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: virtual-incision-oauth-authorization-server.json
+    note: Served after a 301 to the same path with a trailing slash (WP Engine canonicalisation); final status 200,
+      content-type application/json.
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: virtual-incision-oauth-protected-resource.json
+    note: Served after a 301 to the same path with a trailing slash (WP Engine canonicalisation); final status 200,
+      content-type application/json.
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://www.virtualincision.com
+  documents:
+  - path: /
+    status: 200
+    note: www 301-redirects to the apex host; every /.well-known/ path resolves to the apex probe above and is not
+      double-counted.
+findings:
+- virtualincision.com serves BOTH RFC 8414 (oauth-authorization-server) and RFC 9728 (oauth-protected-resource)
+  discovery documents. They are published by the WordPress MCP Adapter / OAuth plugin, not by a product platform
+  team.
+- 'The protected-resource document names https://virtualincision.com/wp-json/mcp/mcp-oauth-server as the protected
+  resource and https://virtualincision.com as its authorization server, with scopes_supported: [mcp].'
+- No security.txt is served even though the company publishes a coordinated vulnerability disclosure policy with
+  a security@virtualincision.com contact at https://virtualincision.com/coordinated-disclosure/ — an RFC 9116 file
+  at /.well-known/security.txt would make that policy machine-discoverable.
+- No agent card at either the canonical or the legacy path; no api-catalog; no apis.json at any of the three locations.
