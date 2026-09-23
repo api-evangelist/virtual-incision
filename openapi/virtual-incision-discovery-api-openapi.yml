@@ -1,20 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Virtual Incision Discovery API (WordPress REST wp/v2)
+  title: Virtual Incision API (WordPress REST wp/v2) Discovery API
   version: wp/v2
   summary: Route, post-type and status discovery, plus the comment surface (comment count is zero on this site).
-  description: 'Virtual Incision publishes virtualincision.com on WordPress (WP Engine), which exposes the WordPress
-    REST API at https://virtualincision.com/wp-json/. The `wp/v2` namespace is anonymously readable and returns
-    the company newsroom, MIRA and miniRAS marketing pages, leadership profiles, events, job postings and the media
-    library as JSON.
-
-
-    This document was DERIVED mechanically by API Evangelist from the route-discovery document served at https://virtualincision.com/wp-json/
-    and the per-collection `OPTIONS` item schemas, both fetched on 2026-09-04 — every path, method, parameter and
-    schema below is taken verbatim from what the host served. Virtual Incision does not publish an OpenAPI definition
-    of its own, and this is NOT a product API: MIRA, the miniaturized robotic-assisted surgery system, has no public
-    API. This is the content API the site CMS exposes. Write operations exist on these routes but require WordPress
-    authentication.'
+  description: Virtual Incision publishes virtualincision.com on WordPress (WP Engine), which exposes the WordPress REST API at https://virtualincision.com/wp-json/.
   contact:
     name: Virtual Incision
     url: https://virtualincision.com/
@@ -25,11 +14,11 @@ info:
 servers:
 - url: https://virtualincision.com/wp-json
   description: Production
+security:
+- {}
 tags:
 - name: Discovery
   description: Route, post-type and status discovery, plus the comment surface (comment count is zero on this site).
-security:
-- {}
 paths:
   /wp/v2:
     get:
@@ -493,8 +482,7 @@ paths:
     post:
       operationId: createComments
       summary: POST /wp/v2/comments
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Discovery
       responses:
@@ -614,8 +602,7 @@ paths:
       - {}
       - applicationPassword: []
       parameters:
-      - &id001
-        name: id
+      - name: id
         in: path
         required: true
         schema:
@@ -641,8 +628,7 @@ paths:
     post:
       operationId: createCommentsById
       summary: POST /wp/v2/comments/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Discovery
       responses:
@@ -674,7 +660,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -729,8 +720,7 @@ paths:
     patch:
       operationId: updateCommentsById
       summary: PATCH /wp/v2/comments/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Discovery
       responses:
@@ -762,7 +752,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -817,8 +812,7 @@ paths:
     delete:
       operationId: deleteCommentsById
       summary: DELETE /wp/v2/comments/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Discovery
       responses:
@@ -850,7 +844,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       - name: force
         in: query
         required: false
@@ -866,29 +865,6 @@ paths:
         description: The password for the parent post of the comment (if the post is password protected).
 components:
   schemas:
-    WPError:
-      type: object
-      description: The WordPress REST API error envelope, returned on every 4xx/5xx.
-      properties:
-        code:
-          type: string
-          description: Machine-readable error slug, e.g. rest_no_route, rest_forbidden.
-        message:
-          type: string
-          description: Human-readable message.
-        data:
-          type: object
-          properties:
-            status:
-              type: integer
-              description: HTTP status code.
-            params:
-              type: object
-              description: Per-parameter validation messages, when present.
-      required:
-      - code
-      - message
-      - data
     Types:
       title: type
       type: object
@@ -948,8 +924,7 @@ components:
           - edit
           readonly: true
         has_archive:
-          description: If the value is a string, the value will be used as the archive slug. If the value is false
-            the post type has no archive.
+          description: If the value is a string, the value will be used as the archive slug. If the value is false the post type has no archive.
           type:
           - string
           - boolean
@@ -1029,249 +1004,34 @@ components:
           - view
           - edit
           - embed
-    Statuses:
-      title: status
+    WPError:
       type: object
+      description: The WordPress REST API error envelope, returned on every 4xx/5xx.
       properties:
-        name:
-          description: The title for the status.
+        code:
           type: string
-          context:
-          - embed
-          - view
-          - edit
-          readonly: true
-        private:
-          description: Whether posts with this status should be private.
-          type: boolean
-          context:
-          - edit
-          readonly: true
-        protected:
-          description: Whether posts with this status should be protected.
-          type: boolean
-          context:
-          - edit
-          readonly: true
-        public:
-          description: Whether posts of this status should be shown in the front end of the site.
-          type: boolean
-          context:
-          - view
-          - edit
-          readonly: true
-        queryable:
-          description: Whether posts with this status should be publicly-queryable.
-          type: boolean
-          context:
-          - view
-          - edit
-          readonly: true
-        show_in_list:
-          description: Whether to include posts in the edit listing for their post type.
-          type: boolean
-          context:
-          - edit
-          readonly: true
-        slug:
-          description: An alphanumeric identifier for the status.
+          description: Machine-readable error slug, e.g. rest_no_route, rest_forbidden.
+        message:
           type: string
-          context:
-          - embed
-          - view
-          - edit
-          readonly: true
-        date_floating:
-          description: Whether posts of this status may have floating published dates.
-          type: boolean
-          context:
-          - view
-          - edit
-          readonly: true
-    Comments:
-      title: comment
-      type: object
-      properties:
-        id:
-          description: Unique identifier for the comment.
-          type: integer
-          context:
-          - view
-          - edit
-          - embed
-          readonly: true
-        author:
-          description: The ID of the user object, if author was a user.
-          type: integer
-          context:
-          - view
-          - edit
-          - embed
-        author_email:
-          description: Email address for the comment author.
-          type: string
-          format: email
-          context:
-          - edit
-        author_ip:
-          description: IP address for the comment author.
-          type: string
-          format: ip
-          context:
-          - edit
-        author_name:
-          description: Display name for the comment author.
-          type: string
-          context:
-          - view
-          - edit
-          - embed
-        author_url:
-          description: URL for the comment author.
-          type: string
-          format: uri
-          context:
-          - view
-          - edit
-          - embed
-        author_user_agent:
-          description: User agent for the comment author.
-          type: string
-          context:
-          - edit
-        content:
-          description: The content for the comment.
+          description: Human-readable message.
+        data:
           type: object
-          context:
-          - view
-          - edit
-          - embed
           properties:
-            raw:
-              description: Content for the comment, as it exists in the database.
-              type: string
-              context:
-              - edit
-            rendered:
-              description: HTML content for the comment, transformed for display.
-              type: string
-              context:
-              - view
-              - edit
-              - embed
-              readonly: true
-        date:
-          description: The date the comment was published, in the site's timezone.
-          type: string
-          format: date-time
-          context:
-          - view
-          - edit
-          - embed
-        date_gmt:
-          description: The date the comment was published, as GMT.
-          type: string
-          format: date-time
-          context:
-          - view
-          - edit
-        link:
-          description: URL to the comment.
-          type: string
-          format: uri
-          context:
-          - view
-          - edit
-          - embed
-          readonly: true
-        parent:
-          description: The ID for the parent of the comment.
-          type: integer
-          context:
-          - view
-          - edit
-          - embed
-          default: 0
-        post:
-          description: The ID of the associated post object.
-          type: integer
-          context:
-          - view
-          - edit
-          default: 0
-        status:
-          description: State of the comment.
-          type: string
-          context:
-          - view
-          - edit
-        type:
-          description: Type of the comment.
-          type: string
-          context:
-          - view
-          - edit
-          - embed
-          readonly: true
-          default: comment
-        author_avatar_urls:
-          description: Avatar URLs for the comment author.
-          type: object
-          context:
-          - view
-          - edit
-          - embed
-          readonly: true
-          properties:
-            '24':
-              description: Avatar URL with image size of 24 pixels.
-              type: string
-              format: uri
-              context:
-              - embed
-              - view
-              - edit
-            '48':
-              description: Avatar URL with image size of 48 pixels.
-              type: string
-              format: uri
-              context:
-              - embed
-              - view
-              - edit
-            '96':
-              description: Avatar URL with image size of 96 pixels.
-              type: string
-              format: uri
-              context:
-              - embed
-              - view
-              - edit
-        meta:
-          description: Meta fields.
-          type: object
-          context:
-          - view
-          - edit
-          properties:
-            _wp_note_status:
-              type: string
-              title: ''
-              description: Note resolution status
-              default: ''
-              enum:
-              - resolved
-              - reopen
-        acf:
-          description: ACF field data
-          type: object
-          properties: []
+            status:
+              type: integer
+              description: HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages, when present.
+      required:
+      - code
+      - message
+      - data
   securitySchemes:
     applicationPassword:
       type: http
       scheme: basic
-      description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php
-        (advertised by the wp-json root `authentication` block).
+      description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php (advertised by the wp-json root `authentication` block).
     cookieNonce:
       type: apiKey
       in: header

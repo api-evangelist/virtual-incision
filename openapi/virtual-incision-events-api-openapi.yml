@@ -1,21 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Virtual Incision Events API (WordPress REST wp/v2)
+  title: Virtual Incision API (WordPress REST wp/v2) Events API
   version: wp/v2
-  summary: The `event` custom post type and its `event-type` taxonomy — conferences and clinical events Virtual
-    Incision attends.
-  description: 'Virtual Incision publishes virtualincision.com on WordPress (WP Engine), which exposes the WordPress
-    REST API at https://virtualincision.com/wp-json/. The `wp/v2` namespace is anonymously readable and returns
-    the company newsroom, MIRA and miniRAS marketing pages, leadership profiles, events, job postings and the media
-    library as JSON.
-
-
-    This document was DERIVED mechanically by API Evangelist from the route-discovery document served at https://virtualincision.com/wp-json/
-    and the per-collection `OPTIONS` item schemas, both fetched on 2026-09-04 — every path, method, parameter and
-    schema below is taken verbatim from what the host served. Virtual Incision does not publish an OpenAPI definition
-    of its own, and this is NOT a product API: MIRA, the miniaturized robotic-assisted surgery system, has no public
-    API. This is the content API the site CMS exposes. Write operations exist on these routes but require WordPress
-    authentication.'
+  summary: The `event` custom post type and its `event-type` taxonomy — conferences and clinical events Virtual Incision attends.
+  description: Virtual Incision publishes virtualincision.com on WordPress (WP Engine), which exposes the WordPress REST API at https://virtualincision.com/wp-json/.
   contact:
     name: Virtual Incision
     url: https://virtualincision.com/
@@ -26,12 +14,11 @@ info:
 servers:
 - url: https://virtualincision.com/wp-json
   description: Production
-tags:
-- name: Events
-  description: The `event` custom post type and its `event-type` taxonomy — conferences and clinical events Virtual
-    Incision attends.
 security:
 - {}
+tags:
+- name: Events
+  description: The `event` custom post type and its `event-type` taxonomy — conferences and clinical events Virtual Incision attends.
 paths:
   /wp/v2/event:
     get:
@@ -266,8 +253,7 @@ paths:
     post:
       operationId: createEvent
       summary: POST /wp/v2/event
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Events
       responses:
@@ -382,8 +368,7 @@ paths:
       - {}
       - applicationPassword: []
       parameters:
-      - &id001
-        name: id
+      - name: id
         in: path
         required: true
         schema:
@@ -409,8 +394,7 @@ paths:
     post:
       operationId: createEventById
       summary: POST /wp/v2/event/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Events
       responses:
@@ -442,7 +426,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -463,7 +452,7 @@ paths:
                   description: An alphanumeric identifier for the post unique to its type.
                 status:
                   type: string
-                  enum: &id002
+                  enum:
                   - publish
                   - future
                   - draft
@@ -494,8 +483,7 @@ paths:
     patch:
       operationId: updateEventById
       summary: PATCH /wp/v2/event/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Events
       responses:
@@ -527,7 +515,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -548,7 +541,13 @@ paths:
                   description: An alphanumeric identifier for the post unique to its type.
                 status:
                   type: string
-                  enum: *id002
+                  enum:
+                  - publish
+                  - future
+                  - draft
+                  - pending
+                  - private
+                  - acf-disabled
                   description: A named status for the post.
                 password:
                   type: string
@@ -573,8 +572,7 @@ paths:
     delete:
       operationId: deleteEventById
       summary: DELETE /wp/v2/event/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Events
       responses:
@@ -606,7 +604,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       - name: force
         in: query
         required: false
@@ -760,8 +763,7 @@ paths:
     post:
       operationId: createEventType
       summary: POST /wp/v2/event-type
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Events
       responses:
@@ -852,8 +854,7 @@ paths:
       - {}
       - applicationPassword: []
       parameters:
-      - &id003
-        name: id
+      - name: id
         in: path
         required: true
         schema:
@@ -873,8 +874,7 @@ paths:
     post:
       operationId: createEventTypeById
       summary: POST /wp/v2/event-type/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Events
       responses:
@@ -906,7 +906,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id003
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -932,8 +937,7 @@ paths:
     patch:
       operationId: updateEventTypeById
       summary: PATCH /wp/v2/event-type/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Events
       responses:
@@ -965,7 +969,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id003
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -991,8 +1000,7 @@ paths:
     delete:
       operationId: deleteEventTypeById
       summary: DELETE /wp/v2/event-type/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Events
       responses:
@@ -1024,7 +1032,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id003
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       - name: force
         in: query
         required: false
@@ -1034,29 +1047,6 @@ paths:
         description: Required to be true, as terms do not support trashing.
 components:
   schemas:
-    WPError:
-      type: object
-      description: The WordPress REST API error envelope, returned on every 4xx/5xx.
-      properties:
-        code:
-          type: string
-          description: Machine-readable error slug, e.g. rest_no_route, rest_forbidden.
-        message:
-          type: string
-          description: Human-readable message.
-        data:
-          type: object
-          properties:
-            status:
-              type: integer
-              description: HTTP status code.
-            params:
-              type: object
-              description: Per-parameter validation messages, when present.
-      required:
-      - code
-      - message
-      - data
     Event:
       title: event
       type: object
@@ -1308,88 +1298,34 @@ components:
               type: array
               items:
                 type: integer
-    EventType:
-      title: event-type
+    WPError:
       type: object
+      description: The WordPress REST API error envelope, returned on every 4xx/5xx.
       properties:
-        id:
-          description: Unique identifier for the term.
-          type: integer
-          context:
-          - view
-          - embed
-          - edit
-          readonly: true
-        count:
-          description: Number of published posts for the term.
-          type: integer
-          context:
-          - view
-          - edit
-          readonly: true
-        description:
-          description: HTML description of the term.
+        code:
           type: string
-          context:
-          - view
-          - edit
-        link:
-          description: URL of the term.
+          description: Machine-readable error slug, e.g. rest_no_route, rest_forbidden.
+        message:
           type: string
-          format: uri
-          context:
-          - view
-          - embed
-          - edit
-          readonly: true
-        name:
-          description: HTML title for the term.
-          type: string
-          context:
-          - view
-          - embed
-          - edit
-          required: true
-        slug:
-          description: An alphanumeric identifier for the term unique to its type.
-          type: string
-          context:
-          - view
-          - embed
-          - edit
-        taxonomy:
-          description: Type attribution for the term.
-          type: string
-          enum:
-          - event-type
-          context:
-          - view
-          - embed
-          - edit
-          readonly: true
-        parent:
-          description: The parent term ID.
-          type: integer
-          context:
-          - view
-          - edit
-        meta:
-          description: Meta fields.
+          description: Human-readable message.
+        data:
           type: object
-          context:
-          - view
-          - edit
-          properties: []
-        acf:
-          description: ACF field data
-          type: object
-          properties: []
+          properties:
+            status:
+              type: integer
+              description: HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages, when present.
+      required:
+      - code
+      - message
+      - data
   securitySchemes:
     applicationPassword:
       type: http
       scheme: basic
-      description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php
-        (advertised by the wp-json root `authentication` block).
+      description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php (advertised by the wp-json root `authentication` block).
     cookieNonce:
       type: apiKey
       in: header

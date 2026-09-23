@@ -1,20 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Virtual Incision Pages API (WordPress REST wp/v2)
+  title: Virtual Incision API (WordPress REST wp/v2) Pages API
   version: wp/v2
   summary: Marketing and clinical pages (MIRA, miniRAS, surgeons, safety information, leadership profiles).
-  description: 'Virtual Incision publishes virtualincision.com on WordPress (WP Engine), which exposes the WordPress
-    REST API at https://virtualincision.com/wp-json/. The `wp/v2` namespace is anonymously readable and returns
-    the company newsroom, MIRA and miniRAS marketing pages, leadership profiles, events, job postings and the media
-    library as JSON.
-
-
-    This document was DERIVED mechanically by API Evangelist from the route-discovery document served at https://virtualincision.com/wp-json/
-    and the per-collection `OPTIONS` item schemas, both fetched on 2026-09-04 — every path, method, parameter and
-    schema below is taken verbatim from what the host served. Virtual Incision does not publish an OpenAPI definition
-    of its own, and this is NOT a product API: MIRA, the miniaturized robotic-assisted surgery system, has no public
-    API. This is the content API the site CMS exposes. Write operations exist on these routes but require WordPress
-    authentication.'
+  description: Virtual Incision publishes virtualincision.com on WordPress (WP Engine), which exposes the WordPress REST API at https://virtualincision.com/wp-json/.
   contact:
     name: Virtual Incision
     url: https://virtualincision.com/
@@ -25,11 +14,11 @@ info:
 servers:
 - url: https://virtualincision.com/wp-json
   description: Production
+security:
+- {}
 tags:
 - name: Pages
   description: Marketing and clinical pages (MIRA, miniRAS, surgeons, safety information, leadership profiles).
-security:
-- {}
 paths:
   /wp/v2/pages:
     get:
@@ -282,8 +271,7 @@ paths:
     post:
       operationId: createPages
       summary: POST /wp/v2/pages
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Pages
       responses:
@@ -420,8 +408,7 @@ paths:
       - {}
       - applicationPassword: []
       parameters:
-      - &id001
-        name: id
+      - name: id
         in: path
         required: true
         schema:
@@ -453,8 +440,7 @@ paths:
     post:
       operationId: createPagesById
       summary: POST /wp/v2/pages/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Pages
       responses:
@@ -486,7 +472,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -507,7 +498,7 @@ paths:
                   description: An alphanumeric identifier for the post unique to its type.
                 status:
                   type: string
-                  enum: &id002
+                  enum:
                   - publish
                   - future
                   - draft
@@ -538,13 +529,13 @@ paths:
                   description: The ID of the featured media for the post.
                 comment_status:
                   type: string
-                  enum: &id003
+                  enum:
                   - open
                   - closed
                   description: Whether or not comments are open on the post.
                 ping_status:
                   type: string
-                  enum: &id004
+                  enum:
                   - open
                   - closed
                   description: Whether or not the post can be pinged.
@@ -560,8 +551,7 @@ paths:
     patch:
       operationId: updatePagesById
       summary: PATCH /wp/v2/pages/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Pages
       responses:
@@ -593,7 +583,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -614,7 +609,13 @@ paths:
                   description: An alphanumeric identifier for the post unique to its type.
                 status:
                   type: string
-                  enum: *id002
+                  enum:
+                  - publish
+                  - future
+                  - draft
+                  - pending
+                  - private
+                  - acf-disabled
                   description: A named status for the post.
                 password:
                   type: string
@@ -639,11 +640,15 @@ paths:
                   description: The ID of the featured media for the post.
                 comment_status:
                   type: string
-                  enum: *id003
+                  enum:
+                  - open
+                  - closed
                   description: Whether or not comments are open on the post.
                 ping_status:
                   type: string
-                  enum: *id004
+                  enum:
+                  - open
+                  - closed
                   description: Whether or not the post can be pinged.
                 menu_order:
                   type: integer
@@ -657,8 +662,7 @@ paths:
     delete:
       operationId: deletePagesById
       summary: DELETE /wp/v2/pages/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Pages
       responses:
@@ -690,7 +694,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       - name: force
         in: query
         required: false
@@ -858,15 +867,13 @@ paths:
       - {}
       - applicationPassword: []
       parameters:
-      - &id005
-        name: parent
+      - name: parent
         in: path
         required: true
         schema:
           type: integer
         description: WordPress identifier for the parent segment.
-      - &id006
-        name: id
+      - name: id
         in: path
         required: true
         schema:
@@ -886,8 +893,7 @@ paths:
     delete:
       operationId: deletePagesByParentRevisionsById
       summary: DELETE /wp/v2/pages/{parent}/revisions/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Pages
       responses:
@@ -919,8 +925,18 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id005
-      - *id006
+      - name: parent
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the parent segment.
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       - name: force
         in: query
         required: false
@@ -1291,8 +1307,7 @@ components:
     applicationPassword:
       type: http
       scheme: basic
-      description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php
-        (advertised by the wp-json root `authentication` block).
+      description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php (advertised by the wp-json root `authentication` block).
     cookieNonce:
       type: apiKey
       in: header

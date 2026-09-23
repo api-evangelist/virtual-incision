@@ -1,20 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Virtual Incision Search API (WordPress REST wp/v2)
+  title: Virtual Incision API (WordPress REST wp/v2) Search API
   version: wp/v2
   summary: Site-wide search across posts, pages and the custom post types.
-  description: 'Virtual Incision publishes virtualincision.com on WordPress (WP Engine), which exposes the WordPress
-    REST API at https://virtualincision.com/wp-json/. The `wp/v2` namespace is anonymously readable and returns
-    the company newsroom, MIRA and miniRAS marketing pages, leadership profiles, events, job postings and the media
-    library as JSON.
-
-
-    This document was DERIVED mechanically by API Evangelist from the route-discovery document served at https://virtualincision.com/wp-json/
-    and the per-collection `OPTIONS` item schemas, both fetched on 2026-09-04 — every path, method, parameter and
-    schema below is taken verbatim from what the host served. Virtual Incision does not publish an OpenAPI definition
-    of its own, and this is NOT a product API: MIRA, the miniaturized robotic-assisted surgery system, has no public
-    API. This is the content API the site CMS exposes. Write operations exist on these routes but require WordPress
-    authentication.'
+  description: Virtual Incision publishes virtualincision.com on WordPress (WP Engine), which exposes the WordPress REST API at https://virtualincision.com/wp-json/.
   contact:
     name: Virtual Incision
     url: https://virtualincision.com/
@@ -25,11 +14,11 @@ info:
 servers:
 - url: https://virtualincision.com/wp-json
   description: Production
+security:
+- {}
 tags:
 - name: Search
   description: Site-wide search across posts, pages and the custom post types.
-security:
-- {}
 paths:
   /wp/v2/search:
     get:
@@ -157,29 +146,6 @@ paths:
         description: Limit result set to specific IDs.
 components:
   schemas:
-    WPError:
-      type: object
-      description: The WordPress REST API error envelope, returned on every 4xx/5xx.
-      properties:
-        code:
-          type: string
-          description: Machine-readable error slug, e.g. rest_no_route, rest_forbidden.
-        message:
-          type: string
-          description: Human-readable message.
-        data:
-          type: object
-          properties:
-            status:
-              type: integer
-              description: HTTP status code.
-            params:
-              type: object
-              description: Per-parameter validation messages, when present.
-      required:
-      - code
-      - message
-      - data
     Search:
       title: search-result
       type: object
@@ -240,12 +206,34 @@ components:
           - view
           - embed
           readonly: true
+    WPError:
+      type: object
+      description: The WordPress REST API error envelope, returned on every 4xx/5xx.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error slug, e.g. rest_no_route, rest_forbidden.
+        message:
+          type: string
+          description: Human-readable message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages, when present.
+      required:
+      - code
+      - message
+      - data
   securitySchemes:
     applicationPassword:
       type: http
       scheme: basic
-      description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php
-        (advertised by the wp-json root `authentication` block).
+      description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php (advertised by the wp-json root `authentication` block).
     cookieNonce:
       type: apiKey
       in: header

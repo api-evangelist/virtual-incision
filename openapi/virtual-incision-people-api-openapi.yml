@@ -1,20 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Virtual Incision People API (WordPress REST wp/v2)
+  title: Virtual Incision API (WordPress REST wp/v2) People API
   version: wp/v2
   summary: Site authors — the leadership and communications bylines behind newsroom posts.
-  description: 'Virtual Incision publishes virtualincision.com on WordPress (WP Engine), which exposes the WordPress
-    REST API at https://virtualincision.com/wp-json/. The `wp/v2` namespace is anonymously readable and returns
-    the company newsroom, MIRA and miniRAS marketing pages, leadership profiles, events, job postings and the media
-    library as JSON.
-
-
-    This document was DERIVED mechanically by API Evangelist from the route-discovery document served at https://virtualincision.com/wp-json/
-    and the per-collection `OPTIONS` item schemas, both fetched on 2026-09-04 — every path, method, parameter and
-    schema below is taken verbatim from what the host served. Virtual Incision does not publish an OpenAPI definition
-    of its own, and this is NOT a product API: MIRA, the miniaturized robotic-assisted surgery system, has no public
-    API. This is the content API the site CMS exposes. Write operations exist on these routes but require WordPress
-    authentication.'
+  description: Virtual Incision publishes virtualincision.com on WordPress (WP Engine), which exposes the WordPress REST API at https://virtualincision.com/wp-json/.
   contact:
     name: Virtual Incision
     url: https://virtualincision.com/
@@ -25,11 +14,11 @@ info:
 servers:
 - url: https://virtualincision.com/wp-json
   description: Production
+security:
+- {}
 tags:
 - name: People
   description: Site authors — the leadership and communications bylines behind newsroom posts.
-security:
-- {}
 paths:
   /wp/v2/users:
     get:
@@ -168,8 +157,7 @@ paths:
           type: array
           items:
             type: string
-        description: Limit result set to users matching at least one specific role provided. Accepts csv list or
-          single role.
+        description: Limit result set to users matching at least one specific role provided. Accepts csv list or single role.
       - name: capabilities
         in: query
         required: false
@@ -177,8 +165,7 @@ paths:
           type: array
           items:
             type: string
-        description: Limit result set to users matching at least one specific capability provided. Accepts csv list
-          or single capability.
+        description: Limit result set to users matching at least one specific capability provided. Accepts csv list or single capability.
       - name: who
         in: query
         required: false
@@ -231,8 +218,7 @@ paths:
     post:
       operationId: createUsers
       summary: POST /wp/v2/users
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - People
       responses:
@@ -356,8 +342,7 @@ paths:
       - {}
       - applicationPassword: []
       parameters:
-      - &id001
-        name: id
+      - name: id
         in: path
         required: true
         schema:
@@ -377,8 +362,7 @@ paths:
     post:
       operationId: createUsersById
       summary: POST /wp/v2/users/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - People
       responses:
@@ -410,7 +394,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -443,7 +432,7 @@ paths:
                   description: Description of the user.
                 locale:
                   type: string
-                  enum: &id002
+                  enum:
                   - ''
                   - en_US
                   description: Locale for the user.
@@ -467,8 +456,7 @@ paths:
     patch:
       operationId: updateUsersById
       summary: PATCH /wp/v2/users/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - People
       responses:
@@ -500,7 +488,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -533,7 +526,9 @@ paths:
                   description: Description of the user.
                 locale:
                   type: string
-                  enum: *id002
+                  enum:
+                  - ''
+                  - en_US
                   description: Locale for the user.
                 nickname:
                   type: string
@@ -555,8 +550,7 @@ paths:
     delete:
       operationId: deleteUsersById
       summary: DELETE /wp/v2/users/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - People
       responses:
@@ -588,7 +582,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       - name: force
         in: query
         required: false
@@ -604,29 +603,6 @@ paths:
         description: Reassign the deleted user's posts and links to this user ID.
 components:
   schemas:
-    WPError:
-      type: object
-      description: The WordPress REST API error envelope, returned on every 4xx/5xx.
-      properties:
-        code:
-          type: string
-          description: Machine-readable error slug, e.g. rest_no_route, rest_forbidden.
-        message:
-          type: string
-          description: Human-readable message.
-        data:
-          type: object
-          properties:
-            status:
-              type: integer
-              description: HTTP status code.
-            params:
-              type: object
-              description: Per-parameter validation messages, when present.
-      required:
-      - code
-      - message
-      - data
     Users:
       title: user
       type: object
@@ -802,12 +778,34 @@ components:
           description: ACF field data
           type: object
           properties: []
+    WPError:
+      type: object
+      description: The WordPress REST API error envelope, returned on every 4xx/5xx.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error slug, e.g. rest_no_route, rest_forbidden.
+        message:
+          type: string
+          description: Human-readable message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages, when present.
+      required:
+      - code
+      - message
+      - data
   securitySchemes:
     applicationPassword:
       type: http
       scheme: basic
-      description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php
-        (advertised by the wp-json root `authentication` block).
+      description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php (advertised by the wp-json root `authentication` block).
     cookieNonce:
       type: apiKey
       in: header

@@ -1,20 +1,9 @@
 openapi: 3.2.0
 info:
-  title: Virtual Incision Taxonomy API (WordPress REST wp/v2)
+  title: Virtual Incision API (WordPress REST wp/v2) Taxonomy API
   version: wp/v2
   summary: Post categories, tags and the taxonomy registry.
-  description: 'Virtual Incision publishes virtualincision.com on WordPress (WP Engine), which exposes the WordPress
-    REST API at https://virtualincision.com/wp-json/. The `wp/v2` namespace is anonymously readable and returns
-    the company newsroom, MIRA and miniRAS marketing pages, leadership profiles, events, job postings and the media
-    library as JSON.
-
-
-    This document was DERIVED mechanically by API Evangelist from the route-discovery document served at https://virtualincision.com/wp-json/
-    and the per-collection `OPTIONS` item schemas, both fetched on 2026-09-04 — every path, method, parameter and
-    schema below is taken verbatim from what the host served. Virtual Incision does not publish an OpenAPI definition
-    of its own, and this is NOT a product API: MIRA, the miniaturized robotic-assisted surgery system, has no public
-    API. This is the content API the site CMS exposes. Write operations exist on these routes but require WordPress
-    authentication.'
+  description: Virtual Incision publishes virtualincision.com on WordPress (WP Engine), which exposes the WordPress REST API at https://virtualincision.com/wp-json/.
   contact:
     name: Virtual Incision
     url: https://virtualincision.com/
@@ -25,11 +14,11 @@ info:
 servers:
 - url: https://virtualincision.com/wp-json
   description: Production
+security:
+- {}
 tags:
 - name: Taxonomy
   description: Post categories, tags and the taxonomy registry.
-security:
-- {}
 paths:
   /wp/v2/categories:
     get:
@@ -177,8 +166,7 @@ paths:
     post:
       operationId: createCategories
       summary: POST /wp/v2/categories
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Taxonomy
       responses:
@@ -269,8 +257,7 @@ paths:
       - {}
       - applicationPassword: []
       parameters:
-      - &id001
-        name: id
+      - name: id
         in: path
         required: true
         schema:
@@ -290,8 +277,7 @@ paths:
     post:
       operationId: createCategoriesById
       summary: POST /wp/v2/categories/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Taxonomy
       responses:
@@ -323,7 +309,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -349,8 +340,7 @@ paths:
     patch:
       operationId: updateCategoriesById
       summary: PATCH /wp/v2/categories/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Taxonomy
       responses:
@@ -382,7 +372,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -408,8 +403,7 @@ paths:
     delete:
       operationId: deleteCategoriesById
       summary: DELETE /wp/v2/categories/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Taxonomy
       responses:
@@ -441,7 +435,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id001
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       - name: force
         in: query
         required: false
@@ -595,8 +594,7 @@ paths:
     post:
       operationId: createTags
       summary: POST /wp/v2/tags
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Taxonomy
       responses:
@@ -684,8 +682,7 @@ paths:
       - {}
       - applicationPassword: []
       parameters:
-      - &id002
-        name: id
+      - name: id
         in: path
         required: true
         schema:
@@ -705,8 +702,7 @@ paths:
     post:
       operationId: createTagsById
       summary: POST /wp/v2/tags/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Taxonomy
       responses:
@@ -738,7 +734,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id002
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -761,8 +762,7 @@ paths:
     patch:
       operationId: updateTagsById
       summary: PATCH /wp/v2/tags/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Taxonomy
       responses:
@@ -794,7 +794,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id002
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       requestBody:
         required: false
         content:
@@ -817,8 +822,7 @@ paths:
     delete:
       operationId: deleteTagsById
       summary: DELETE /wp/v2/tags/{id}
-      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or
-        a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
+      description: Write operation. Requires WordPress authentication (Application Password over HTTP Basic, or a logged-in cookie plus X-WP-Nonce); anonymous callers receive HTTP 401.
       tags:
       - Taxonomy
       responses:
@@ -850,7 +854,12 @@ paths:
       - applicationPassword: []
       - cookieNonce: []
       parameters:
-      - *id002
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: WordPress identifier for the id segment.
       - name: force
         in: query
         required: false
@@ -968,29 +977,6 @@ paths:
         description: Scope under which the request is made; determines fields present in response.
 components:
   schemas:
-    WPError:
-      type: object
-      description: The WordPress REST API error envelope, returned on every 4xx/5xx.
-      properties:
-        code:
-          type: string
-          description: Machine-readable error slug, e.g. rest_no_route, rest_forbidden.
-        message:
-          type: string
-          description: Human-readable message.
-        data:
-          type: object
-          properties:
-            status:
-              type: integer
-              description: HTTP status code.
-            params:
-              type: object
-              description: Per-parameter validation messages, when present.
-      required:
-      - code
-      - message
-      - data
     Categories:
       title: category
       type: object
@@ -1067,181 +1053,34 @@ components:
           description: ACF field data
           type: object
           properties: []
-    Tags:
-      title: tag
+    WPError:
       type: object
+      description: The WordPress REST API error envelope, returned on every 4xx/5xx.
       properties:
-        id:
-          description: Unique identifier for the term.
-          type: integer
-          context:
-          - view
-          - embed
-          - edit
-          readonly: true
-        count:
-          description: Number of published posts for the term.
-          type: integer
-          context:
-          - view
-          - edit
-          readonly: true
-        description:
-          description: HTML description of the term.
+        code:
           type: string
-          context:
-          - view
-          - edit
-        link:
-          description: URL of the term.
+          description: Machine-readable error slug, e.g. rest_no_route, rest_forbidden.
+        message:
           type: string
-          format: uri
-          context:
-          - view
-          - embed
-          - edit
-          readonly: true
-        name:
-          description: HTML title for the term.
-          type: string
-          context:
-          - view
-          - embed
-          - edit
-          required: true
-        slug:
-          description: An alphanumeric identifier for the term unique to its type.
-          type: string
-          context:
-          - view
-          - embed
-          - edit
-        taxonomy:
-          description: Type attribution for the term.
-          type: string
-          enum:
-          - post_tag
-          context:
-          - view
-          - embed
-          - edit
-          readonly: true
-        meta:
-          description: Meta fields.
+          description: Human-readable message.
+        data:
           type: object
-          context:
-          - view
-          - edit
-          properties: []
-    Taxonomies:
-      title: taxonomy
-      type: object
-      properties:
-        capabilities:
-          description: All capabilities used by the taxonomy.
-          type: object
-          context:
-          - edit
-          readonly: true
-        description:
-          description: A human-readable description of the taxonomy.
-          type: string
-          context:
-          - view
-          - edit
-          readonly: true
-        hierarchical:
-          description: Whether or not the taxonomy should have children.
-          type: boolean
-          context:
-          - view
-          - edit
-          readonly: true
-        labels:
-          description: Human-readable labels for the taxonomy for various contexts.
-          type: object
-          context:
-          - edit
-          readonly: true
-        name:
-          description: The title for the taxonomy.
-          type: string
-          context:
-          - view
-          - edit
-          - embed
-          readonly: true
-        slug:
-          description: An alphanumeric identifier for the taxonomy.
-          type: string
-          context:
-          - view
-          - edit
-          - embed
-          readonly: true
-        show_cloud:
-          description: Whether or not the term cloud should be displayed.
-          type: boolean
-          context:
-          - edit
-          readonly: true
-        types:
-          description: Types associated with the taxonomy.
-          type: array
-          items:
-            type: string
-          context:
-          - view
-          - edit
-          readonly: true
-        rest_base:
-          description: REST base route for the taxonomy.
-          type: string
-          context:
-          - view
-          - edit
-          - embed
-          readonly: true
-        rest_namespace:
-          description: REST namespace route for the taxonomy.
-          type: string
-          context:
-          - view
-          - edit
-          - embed
-          readonly: true
-        visibility:
-          description: The visibility settings for the taxonomy.
-          type: object
-          context:
-          - edit
-          readonly: true
           properties:
-            public:
-              description: Whether a taxonomy is intended for use publicly either via the admin interface or by
-                front-end users.
-              type: boolean
-            publicly_queryable:
-              description: Whether the taxonomy is publicly queryable.
-              type: boolean
-            show_ui:
-              description: Whether to generate a default UI for managing this taxonomy.
-              type: boolean
-            show_admin_column:
-              description: Whether to allow automatic creation of taxonomy columns on associated post-types table.
-              type: boolean
-            show_in_nav_menus:
-              description: Whether to make the taxonomy available for selection in navigation menus.
-              type: boolean
-            show_in_quick_edit:
-              description: Whether to show the taxonomy in the quick/bulk edit panel.
-              type: boolean
+            status:
+              type: integer
+              description: HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages, when present.
+      required:
+      - code
+      - message
+      - data
   securitySchemes:
     applicationPassword:
       type: http
       scheme: basic
-      description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php
-        (advertised by the wp-json root `authentication` block).
+      description: WordPress Application Passwords over HTTP Basic. Issued at https://virtualincision.com/wp-admin/authorize-application.php (advertised by the wp-json root `authentication` block).
     cookieNonce:
       type: apiKey
       in: header
